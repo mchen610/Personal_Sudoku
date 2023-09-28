@@ -1,8 +1,7 @@
 import pygame
 import random
-import sys
-from os import path
 from colors import *
+from offset_linear_regression import params
 
 
 
@@ -42,12 +41,13 @@ class Button:
             self.render = font.render(text, True, COLOR)
             self.font_rect = self.render.get_rect(center=center)
 
-        self.font_rect.centery = self.font_rect.centery+self.font_size*0.04442-0.4680 #move text to center
+        self.font_rect.centery = self.font_rect.centery+self.font_size*params['coef']+params['intercept'] #move text to center
 
     def change_center(self, center: tuple):
         self.real_rect.center = center
         self.font_rect.center = center
-        self.font_rect.centery = self.font_rect.centery+self.font_size*0.04442-0.4680
+        self.font_rect.centery = self.font_rect.centery+self.font_size*params['coef']+params['intercept'] #move text to center
+
         
     def get_text_bottom(self):
         #bottom of real rect - empty space between bottom and text. font_size/2 is the actual pixel height of the text
