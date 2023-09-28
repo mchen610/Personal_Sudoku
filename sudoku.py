@@ -9,7 +9,7 @@ MEDIUM = 40
 HARD = 55
 
 #BOARD DIMENSIONS
-NORMAL = 9
+NORMAL = 9  
 
 screen_length = 440
 
