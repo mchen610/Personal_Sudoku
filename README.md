@@ -1,3 +1,13 @@
-# Personal Sudoku Project
+![Pygame](https://www.pygame.org/docs/_images/pygame_logo.png)
+![Sudoku](https://static.vecteezy.com/system/resources/previews/009/201/962/original/sudoku-word-logo-design-free-vector.jpg)
+# Sudoku Clone
 
-This was originally meant to be a group project but I decided to make my own version in my free time while still leading the group project in the 'group' version.
+## Difficulties
+- **EASY**
+- **MEDIUM**
+- **HARD**
+
+## How to play
+- **MOVE**: ARROW keys or mouse hover/click
+- **SKETCH**: Press number once
+- **LOCK IN NUMBER**: Press number again or press ENTER

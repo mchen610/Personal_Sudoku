@@ -1,10 +1,10 @@
 from board import Board, Cell
 import pygame   
-from button import Button
+from pygamecentering import Button, Text
 from colors import *
 
 #DIFFICULTIES
-EASY = 3
+EASY = 30
 MEDIUM = 40
 HARD = 55
 
@@ -80,11 +80,11 @@ def main():
 
     #difficulty buttons settings
     diff_dim = (screen_length*0.6, screen_length*0.15) #(w,h)
-
+    
     welcome_center = (screen_center,screen_length//10)
-    welcome_text = Button(screen, 'PLAY SUDOKU', WHITE, center = welcome_center, dim = (screen_length*0.8, screen_length*0.13))
-    welcome_y = welcome_text.get_text_bottom()
-    welcome_text.draw_text()
+    welcome_text = Text(screen, 'PLAY SUDOKU', WHITE, welcome_center, 70)
+    welcome_y = screen_length//10+int(screen_length*0.075)
+    welcome_text.draw()
 
     easy_button = Button(screen, 'EASY', GREEN, center = (screen_center, screen_center//2+welcome_y//2), dim = diff_dim)
     easy_button.draw()
@@ -101,11 +101,11 @@ def main():
     #get difficulty
     DIFFICULTY = 0
     while DIFFICULTY == 0:
-        if easy_button.check_clicked():
-            DIFFICULTY = EASY
-        elif medium_button.check_clicked():
+        if easy_button.is_clicked():
+                DIFFICULTY = EASY
+        elif medium_button.is_clicked():
             DIFFICULTY = MEDIUM
-        elif hard_button.check_clicked(): 
+        elif hard_button.is_clicked(): 
             DIFFICULTY = HARD
 
         for event in pygame.event.get():
@@ -113,7 +113,7 @@ def main():
                 pygame.quit()
                 exit()
 
-        clock.tick(60) #fps
+        clock.tick(60)
         pygame.display.update()
 
     screen.fill(BLACK)
@@ -154,37 +154,36 @@ def main():
     bad_entries = set()
     sketched_entries = set()
     #while empty cells exist (sketched counts as empty)
-  
-    while True:
+    
+    
+    while submit_button.clicked == False:
+        if retry_button.is_clicked():
+                if locked:
+                    sudoku.remove_border(prevCell)
+                for cell in valid_entries:
+                    cell.erase_value()
+                    cell.set_value(0)
+                for cell in bad_entries:
+                    cell.erase_value()
+                    cell.set_value(0)
+                for cell in sketched_entries:
+                    cell.erase_value(sketched = True)
+                    cell.set_sketched_value(0)
+                valid_entries.clear()
+                bad_entries.clear()
+                sketched_entries.clear()
 
-        if retry_button.check_clicked():
-            if locked:
-                sudoku.remove_border(prevCell)
-            for cell in valid_entries:
-                cell.erase_value()
-                cell.set_value(0)
-            for cell in bad_entries:
-                cell.erase_value()
-                cell.set_value(0)
-            for cell in sketched_entries:
-                cell.erase_value(sketched = True)
-                cell.set_sketched_value(0)
-            valid_entries.clear()
-            bad_entries.clear()
-            sketched_entries.clear()
-
-        if menu_button.check_clicked():
+        if menu_button.is_clicked():
             main()
 
-        if exit_button.check_clicked():
+        if exit_button.is_clicked():
             pygame.quit()
             exit()
 
-        if submit_button.check_clicked() and (len(valid_entries) > 0 or len(bad_entries) > 0):
-            break
+        if submit_button.is_clicked() and (len(valid_entries) > 0 or len(bad_entries) > 0):
+            break  
 
-        for event in pygame.event.get():      
-            #print(pygame.event.event_name(event.type))
+        for event in pygame.event.get():    
 
             if is_arrow(event):
                 currentCell = arrow_move(sudoku, prevCell, event)  
@@ -195,7 +194,6 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEMOTION and not locked:
                 currentCell = get_hoveredCell(sudoku)
 
-            #else, currentCell stays equal to prevCell
 
             if currentCell != prevCell or not locked: #switched cells or unlocked from same cell
                 
@@ -208,7 +206,7 @@ def main():
 
                 pygame.display.update()
             
-            #user has left check_clicked an editable cell
+            #user has left is_clicked an editable cell
             if currentCell != None and not currentCell.generated: 
                 if left_click(event):
                     currentCell.draw_outline(RED)
@@ -218,7 +216,7 @@ def main():
                 while typing:
                     
                     for new_event in pygame.event.get():
-                        if retry_button.check_clicked() or menu_button.check_clicked() or exit_button.check_clicked() or submit_button.check_clicked():
+                        if retry_button.is_clicked() or menu_button.is_clicked() or exit_button.is_clicked() or submit_button.is_clicked():
                             typing = False
                             break                           
                             
@@ -291,6 +289,7 @@ def main():
         pygame.display.update()
     
     '''GAME OVER''' 
+
     if locked:
         sudoku.remove_border(prevCell)
 
@@ -327,19 +326,19 @@ def main():
     screen.fill(screen_color)
     screen.blit(text, text.get_rect(center = (screen_center,screen_center)))
 
-    menu_button.change_center(center = (2*screen_center/3, screen_center*1.5))
+    menu_button.move((2*screen_center/3, screen_center*1.5))
     menu_button.draw()
 
-    exit_button.change_center(center = (4*screen_center/3, screen_center*1.5))
+    exit_button.move((4*screen_center/3, screen_center*1.5))
     exit_button.draw()
 
     pygame.display.update()
 
     while True:
-        if menu_button.check_clicked():
+        if menu_button.is_clicked():
             main()
         
-        if exit_button.check_clicked():
+        if exit_button.is_clicked():
             pygame.quit()
             exit()
 
