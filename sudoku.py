@@ -13,7 +13,7 @@ NORMAL = 9
 
 screen_length = 440
 
-#use in get_hoveredCell, changes mouse pos in terms of board indices, no cell if past row_length (9) or below 0
+#use in get_hovered_cell, changes mouse pos in terms of board indices, no cell if past row_length (9) or below 0
 def board_pos(sudoku: Board):
     mouse_pos = list(pygame.mouse.get_pos())
     #mouse_pos = [x,y] -> mouse_pos = [col,row]
@@ -24,7 +24,7 @@ def board_pos(sudoku: Board):
     #mouse_pos = [col,row]
     return mouse_pos
 
-def get_hoveredCell(sudoku: Board): #get hovered cell
+def get_hovered_cell(sudoku: Board): #get hovered cell
     mouse_pos = board_pos(sudoku)
     if not (8 >= mouse_pos[0] >= 0 and 8 >= mouse_pos[1] >= 0): #if not in board
         return None
@@ -144,7 +144,7 @@ def main():
     exit_button.draw()
 
     #bottom
-    submit_button = Button(screen, 'SUBMIT', WHITE, (screen_length//2, int(button_y+button_dim[1]*1.5)), (button_dim[0]*1.3,button_dim[1]*1.1), thickness = 2) 
+    submit_button = Button(screen, 'SUBMIT', WHITE, (screen_length//2, int(button_y+button_dim[1]*1.5)), (int(button_dim[0]*1.3),int(button_dim[1]))) 
     submit_button.draw()
 
     prevCell = None
@@ -192,7 +192,7 @@ def main():
                 pygame.event.post(event)
 
             elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEMOTION and not locked:
-                currentCell = get_hoveredCell(sudoku)
+                currentCell = get_hovered_cell(sudoku)
 
 
             if currentCell != prevCell or not locked: #switched cells or unlocked from same cell
